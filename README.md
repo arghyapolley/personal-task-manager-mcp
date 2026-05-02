@@ -1,28 +1,28 @@
-# 📋 Personal Task Manager — MCP Server
+# Personal Task Manager — MCP Server
 
 A **Model Context Protocol (MCP)** server that turns any AI assistant into a powerful task management system. Built with Python and SQLite, it exposes **19 tools** for full-lifecycle task management — from quick to-dos to multi-project workflows with priorities, tags, subtasks, and more.
 
 ```
-AI Assistant  ⟷  MCP Protocol (stdio)  ⟷  Task Manager Server  ⟷  SQLite DB
+AI Assistant  <-->  MCP Protocol (stdio)  <-->  Task Manager Server  <-->  SQLite DB
 ```
 
 ---
 
-## ✨ Features
+## Features
 
 | Feature | Description |
 |---------|-------------|
-| 📅 **Due Dates & Deadlines** | Set, update, or clear deadlines on any task |
-| 🔴🟡🟢 **Priorities** | Classify tasks as `high`, `medium`, or `low` |
-| 🔄 **Status Workflow** | Full lifecycle: `todo` → `in_progress` → `blocked` → `done` → `archived` |
-| 🏷️ **Tags & Labels** | Flexible many-to-many tagging (e.g. `@work`, `@home`, `urgent`) |
-| 📝 **Notes & Descriptions** | Rich markdown notes attached to any task |
-| ✅ **Subtasks & Checklists** | Break tasks into ordered, toggleable checklist items |
-| 📁 **Lists & Projects** | Organize tasks by context — work, personal, side-project |
+| **Due Dates & Deadlines** | Set, update, or clear deadlines on any task |
+| **Priorities** | Classify tasks as `high`, `medium`, or `low` |
+| **Status Workflow** | Full lifecycle: `todo` > `in_progress` > `blocked` > `done` > `archived` |
+| **Tags & Labels** | Flexible many-to-many tagging (e.g. `@work`, `@home`, `urgent`) |
+| **Notes & Descriptions** | Rich markdown notes attached to any task |
+| **Subtasks & Checklists** | Break tasks into ordered, toggleable checklist items |
+| **Lists & Projects** | Organize tasks by context — work, personal, side-project |
 
 ---
 
-## 🛠️ All 19 MCP Tools
+## All 19 MCP Tools
 
 ### Core CRUD
 
@@ -71,7 +71,7 @@ AI Assistant  ⟷  MCP Protocol (stdio)  ⟷  Task Manager Server  ⟷  SQLite D
 | Tool | Signature | Description |
 |------|-----------|-------------|
 | `add_subtask` | `(parent_id, title)` | Add a checklist item to a task |
-| `toggle_subtask` | `(subtask_id)` | Toggle completion (done ↔ not done) |
+| `toggle_subtask` | `(subtask_id)` | Toggle completion (done / not done) |
 | `delete_subtask` | `(subtask_id)` | Remove a subtask |
 | `list_subtasks` | `(parent_id)` | List all subtasks of a task |
 
@@ -86,7 +86,7 @@ AI Assistant  ⟷  MCP Protocol (stdio)  ⟷  Task Manager Server  ⟷  SQLite D
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -139,40 +139,40 @@ Then restart Claude Desktop. You can now say things like:
 
 ---
 
-## 🗄️ Database Schema
+## Database Schema
 
 ```
-┌──────────────┐       ┌──────────────┐
-│    lists     │       │     tags     │
-├──────────────┤       ├──────────────┤
-│ id (PK)      │       │ id (PK)      │
-│ name (UQ)    │       │ name (UQ)    │
-│ description  │       └──────┬───────┘
-│ created_at   │              │
-└──────┬───────┘              │
-       │                ┌─────┴──────┐
-       │ 1:N            │ task_tags  │
-       │                ├────────────┤
-┌──────┴───────┐        │ task_id(FK)│──┐
-│    tasks     │        │ tag_id(FK) │  │
-├──────────────┤        └────────────┘  │
-│ id (PK)      │◄──────────────────────┘
-│ title        │
-│ description  │        ┌────────────┐
-│ status       │        │  subtasks  │
-│ due_date     │        ├────────────┤
-│ priority     │   1:N  │ id (PK)    │
-│ list_id (FK) │◄──────┤│ parent_id  │
-│ notes        │        │ title      │
-│ created_at   │        │is_completed│
-│ updated_at   │        │ sort_order │
-└──────────────┘        │ created_at │
-                        └────────────┘
++---------------+       +---------------+
+|    lists      |       |     tags      |
++---------------+       +---------------+
+| id (PK)       |       | id (PK)       |
+| name (UQ)     |       | name (UQ)     |
+| description   |       +-------+-------+
+| created_at    |               |
++-------+-------+               |
+        |                +------+------+
+        | 1:N            | task_tags   |
+        |                +-------------+
++-------+-------+       | task_id(FK) |--+
+|    tasks      |       | tag_id(FK)  |  |
++---------------+       +-------------+  |
+| id (PK)       |<-----------------------+
+| title         |
+| description   |       +-------------+
+| status        |       |  subtasks   |
+| due_date      |       +-------------+
+| priority      |  1:N  | id (PK)     |
+| list_id (FK)  |<------| parent_id   |
+| notes         |       | title       |
+| created_at    |       |is_completed |
+| updated_at    |       | sort_order  |
++---------------+       | created_at  |
+                        +-------------+
 ```
 
 ---
 
-## 🧪 Testing
+## Testing
 
 Run the full test suite (63 tests, uses a temporary DB):
 
@@ -188,19 +188,19 @@ Tests cover: schema creation, CRUD, priorities, status workflow, tags (add/remov
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 personal-task-manager-mcp/
-├── server.py          # MCP server — 19 tools, DB init, schema migration
-├── test_server.py     # Comprehensive test suite (63 assertions)
-├── requirements.txt   # Python dependencies (mcp, pydantic)
-├── tasks.db           # SQLite database (auto-created on first run)
-└── README.md          # This file
+|-- server.py          # MCP server -- 19 tools, DB init, schema migration
+|-- test_server.py     # Comprehensive test suite (63 assertions)
+|-- requirements.txt   # Python dependencies (mcp, pydantic)
+|-- tasks.db           # SQLite database (auto-created on first run)
++-- README.md          # This file
 ```
 
 ---
 
-## 📄 License
+## License
 
-MIT — use it however you like.
+MIT -- use it however you like.
