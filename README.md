@@ -1,6 +1,6 @@
 # Personal Task Manager — MCP Server
 
-A **Model Context Protocol (MCP)** server that turns any AI assistant into a powerful task management system. Built with Python and SQLite, it exposes **19 tools** for full-lifecycle task management — from quick to-dos to multi-project workflows with priorities, tags, subtasks, and more.
+A **Model Context Protocol (MCP)** server that turns any AI assistant into a powerful task management system. Built with Python and SQLite, it exposes **19 tools** for full lifecycle task management from quick to-dos to multi project workflows with priorities, tags, subtasks, and more.
 
 ```
 AI Assistant  <-->  MCP Protocol (stdio)  <-->  Task Manager Server  <-->  SQLite DB
@@ -201,6 +201,3 @@ personal-task-manager-mcp/
 
 ---
 
-## License
-
-MIT -- use it however you like.
